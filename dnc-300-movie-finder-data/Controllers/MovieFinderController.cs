@@ -19,11 +19,11 @@ namespace dnc_300_movie_finder_data.Controllers
 
     public class MovieFinderController : Controller
     {
-        
+        // Creates a file "dataa" that is seralized binary.
         string filePath = HostingEnvironment.MapPath("~/dataa");
-
+        // We need a new list obj to carry over items from previous list or to substantiate a new one.
         private List<Movie> MoviesCacheTransferList = new List<Movie>();
-
+        // Calling our helper class.
         private DataSerializer dataSerializer = new DataSerializer();
         public ActionResult FindMovie()
         {
@@ -33,6 +33,7 @@ namespace dnc_300_movie_finder_data.Controllers
         //[HttpPost]
         public ActionResult MovieResults(string searchString)
         {
+            //Pull in file and turn it into a list of movies then loop titles if one matches return view with data. Else we transfer the movies to a new array.
             List<Movie> MoviesCache = dataSerializer.BinaryDeserialize(filePath) as List<Movie>;
             if (MoviesCache != null)
             {
@@ -48,15 +49,15 @@ namespace dnc_300_movie_finder_data.Controllers
                     }
                 }
             }
-
+            //API call after determining the query wasn't in the cache.
             string response = CallOmdb($"http://www.omdbapi.com/?t={searchString}&apikey=af11b31");
-
+            // Turn string into obj.
             Movie dP = JsonConvert.DeserializeObject<Movie>(response);
-
+            //Adding our new search data to the list.
             MoviesCacheTransferList.Add(dP);
-
+            //Turning the list back into serialized binary.
             dataSerializer.BinarySerialize(MoviesCacheTransferList, filePath);
-
+            // This read was to step through with the debug tool to ensure that the write file worked.
             List<Movie> foo = dataSerializer.BinaryDeserialize(filePath) as List<Movie>;
 
             return View(dP);
