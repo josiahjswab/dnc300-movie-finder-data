@@ -1,4 +1,4 @@
-﻿
+﻿@model dnc_300_movie_finder_data.Models.Movie
 @{
     ViewBag.Title = "MovieResults";
     Layout = "~/Areas/HelpPage/Views/Shared/_Layout.cshtml";
@@ -6,5 +6,11 @@
 
 <h2>MovieResults</h2>
 
-<p>TODO: List from omdb here. @Model </p>
+<p>@Model.Title</p>
+<p>@Model.Rated</p>
+<p>@Model.Released</p>
+<p>@Model.Runtime</p>
+<p>@Model.Genre</p>
+<p>@Model.imdbRating</p>
+
 
