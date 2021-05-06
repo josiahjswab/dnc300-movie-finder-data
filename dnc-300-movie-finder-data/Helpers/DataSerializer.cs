@@ -7,32 +7,43 @@ namespace dnc_300_movie_finder_data.Helpers
 {
     public class DataSerializer
     {
-        public void BinarySerialize(object data, string filePath)
+        public static void BinarySerialize(object data, string filePath)
         {
-            FileStream fileStream;
+            FileStream fileStream = default(FileStream);
             BinaryFormatter bf = new BinaryFormatter();
 
-            if(File.Exists(filePath)) File.Delete(filePath);
-            fileStream = File.Create(filePath);
-            bf.Serialize(fileStream, data);
-            fileStream.Close();
-        }
-
-        public object BinaryDeserialize(string filePath)
-        {
-            object obj = null;
-            FileStream fileStream;
-            BinaryFormatter bf = new BinaryFormatter();
-
-            if (File.Exists(filePath))
+            try
             {
-                fileStream = File.OpenRead(filePath);
-                obj = bf.Deserialize(fileStream);
+
+                if (File.Exists(filePath)) File.Delete(filePath);
+                fileStream = File.Create(filePath);
+                bf.Serialize(fileStream, data);
+            }
+            finally
+            {
                 fileStream.Close();
             }
+        }
 
+        public static object BinaryDeserialize(string filePath)
+        {
+            object obj = null;
+            FileStream fileStream = default(FileStream);
+            BinaryFormatter bf = new BinaryFormatter();
+            if (File.Exists(filePath))
+            {
+                try
+                {
+
+                    fileStream = File.OpenRead(filePath);
+                    obj = bf.Deserialize(fileStream);
+                }
+                finally
+                {
+                    fileStream.Close();
+                }
+            }
             return obj;
         }
     }
-
 }
