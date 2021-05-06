@@ -24,17 +24,14 @@ namespace dnc_300_movie_finder_data.Controllers
         {
             return View();
         }
-        
 
-        //private readonly DataSerializer _dataSerializer = new DataSerializer();
-
-        readonly string filePath = HostingEnvironment.MapPath("~/movie_list");
+        readonly string _filePath = HostingEnvironment.MapPath("~/movie_list");
 
         private readonly List<Movie> _moviesCacheTransferList = new List<Movie>();
         public ActionResult MovieResults(string searchString)
         {
 
-            List<Movie> moviesCache = DataSerializer.BinaryDeserialize(filePath) as List<Movie>;
+            List<Movie> moviesCache = DataSerializer.BinaryDeserialize(_filePath) as List<Movie>;
 
             if (moviesCache != null)
             {
@@ -55,7 +52,7 @@ namespace dnc_300_movie_finder_data.Controllers
 
             _moviesCacheTransferList.Add(dP);
 
-            DataSerializer.BinarySerialize(_moviesCacheTransferList, filePath);
+            DataSerializer.BinarySerialize(_moviesCacheTransferList, _filePath);
 
             return View(dP);
         }
